@@ -4,10 +4,16 @@ const getCurrentUser = () => {
   return firebase.auth().currentUser
 }
 
-const requiresUser = (callback) => {
-  const cancel = firebase.auth().onAuthStateChanged((user) => {
-    cancel()
-    callback(user)
+const requiresUser = () => {
+  return new Promise((resolve, reject) => {
+    const cancel = firebase.auth().onAuthStateChanged((user) => {
+      cancel()
+      if (user) {
+        resolve(user)
+        return
+      }
+      reject()
+    })
   })
 }
 
