@@ -1,6 +1,6 @@
 <template>
   <div class="ui segment">
-    User {{ $router.params.id }}
+    User : {{ $route.params.id }}
     <ProfileDetail v-if="data" :profile="data"></ProfileDetail>
   </div>
 </template>
@@ -26,7 +26,7 @@ export default{
   },
   methods: {
     reload () {
-      User.get(this.$router.params.id, (data) => {
+      User.subscribe(this.$route.params.id, (data) => {
         this.data = data
       })
     }
