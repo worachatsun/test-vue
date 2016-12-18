@@ -4,7 +4,8 @@ import Home from './components/Home'
 import Profile from './components/Profile'
 import User from './components/User'
 import SignIn from './components/SignIn'
-import firebase from 'firebase'
+import { Auth } from './services'
+import ProfileEdit from './components/ProfileEdit'
 
 Vue.use(VueRouter)
 
@@ -13,6 +14,7 @@ const router = new VueRouter({
   routes: [
     { path: '/', component: Home },
     {path: '/profile', component: Profile, meta: { requiresAuth: true }},
+    {path: '/profile/edit', component: ProfileEdit, meta: { requiresAuth: true }},
     { path: '/user/:id', component: User },
     { path: '/signin', component: SignIn }
   ]
@@ -20,8 +22,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some((x) => x.meta.requiresAuth)) {
-    const cancel = firebase.auth().onAuthStateChanged((user) => {
-      cancel()
+    Auth.requiresUser((user) => {
       if (user) {
         next()
         return
